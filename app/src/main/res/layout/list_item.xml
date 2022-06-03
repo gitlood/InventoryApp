@@ -3,9 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="16dp">
-
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
@@ -18,10 +27,12 @@
         android:id="@+id/quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:fontFamily="sans-serif"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="#AEB6BD"  />
-
+</LinearLayout>
     <TextView
         android:id="@+id/price"
         android:layout_width="wrap_content"
@@ -29,4 +40,11 @@
         android:fontFamily="sans-serif"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="#AEB6BD"  />
+    </LinearLayout>
+    <ImageView
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:id="@+id/sale_button"
+        android:src="@drawable/ic_baseline_point_of_sale_24"
+        android:contentDescription="@string/sale_description" />
 </LinearLayout>

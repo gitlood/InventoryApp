@@ -73,5 +73,6 @@
     <!-- Dialog button text for the option to keep editing the current inventory item [CHAR LIMIT=20] -->
     <string name="keep_editing">Keep Editing</string>
 
-
+<!-- sale image content description -->
+    <string name="sale_description">For Sale</string>
 </resources>

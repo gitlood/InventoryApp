@@ -131,8 +131,8 @@ public class InventoryProvider extends ContentProvider {
             throw new IllegalArgumentException("Inventory item requires a name");
         }
 
-        // Check that the gender is valid
-        Integer quantity = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY);
+        // Check that the quantity is valid
+        int quantity = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY);
 
         // If the price is provided, check that it's greater than or equal to 0
         Integer price = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE);
@@ -193,11 +193,11 @@ public class InventoryProvider extends ContentProvider {
         }
 
         // If the {@link InventoryEntry#COLUMN_ITEM_QUANTITY} key is present,
-        // check that the weight value is valid.
+        // check that the quantity value is valid.
         if (values.containsKey(InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY)) {
             // Check that the quantity is greater than or equal to 0
-            Integer weight = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY);
-            if (weight != null && weight < 0) {
+            Integer quantity = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY);
+            if (quantity != null && quantity < 0) {
                 throw new IllegalArgumentException("Inventory item requires valid quantity");
             }
         }
@@ -205,9 +205,9 @@ public class InventoryProvider extends ContentProvider {
         // If the {@link InventoryEntry#COLUMN_ITEM_PRICE} key is present,
         // check that the PRICE value is valid.
         if (values.containsKey(InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE)) {
-            // Check that the quantity is greater than or equal to 0
-            Integer weight = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE);
-            if (weight != null && weight < 0) {
+            // Check that the price is greater than or equal to 0
+            Integer price = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE);
+            if (price != null && price < 0) {
                 throw new IllegalArgumentException("Inventory item requires valid price");
             }
         }

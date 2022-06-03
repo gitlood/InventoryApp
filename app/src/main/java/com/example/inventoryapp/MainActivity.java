@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 /**
@@ -100,10 +101,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY, "6");
         values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE, "1999");
 
-        // Insert a new row for Toto into the provider using the ContentResolver.
+        // Insert a new row for inventory item into the provider using the ContentResolver.
         // Use the {@link InventoryEntry#CONTENT_URI} to indicate that we want to insert
         // into the inventory database table.
-        // Receive the new content URI that will allow us to access Toto's data in the future.
+        // Receive the new content URI that will allow us to access inventory item data in the future.
         Uri newUri = getContentResolver().insert(InventoryContract.InventoryEntry.CONTENT_URI, values);
     }
 

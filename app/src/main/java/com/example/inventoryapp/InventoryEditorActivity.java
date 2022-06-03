@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.inventoryapp.data.InventoryContract;
@@ -64,7 +65,7 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         setContentView(R.layout.activity_inventory_editor);
 
         // Examine the intent that was used to launch this activity,
-        // in order to figure out if we're creating a new inventroy item or editing an existing one.
+        // in order to figure out if we're creating a new inventory item or editing an existing one.
         Intent intent = getIntent();
         mCurrentInventoryItemUri = intent.getData();
 
@@ -110,6 +111,10 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         }
         return true;
     }
+
+public void sellItem(){
+//TODO
+}
 
     /**
      * Get user input from editor and save inventory item into database.

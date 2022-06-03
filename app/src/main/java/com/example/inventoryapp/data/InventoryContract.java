@@ -80,7 +80,7 @@ public class InventoryContract {
         /**
          * Quantity of the inventory item.
          * <p>
-         * Type: TEXT
+         * Type: INTEGER
          */
         public final static String COLUMN_ITEM_QUANTITY = "quantity";
 
