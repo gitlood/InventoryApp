@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -111,10 +113,6 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         }
         return true;
     }
-
-public void sellItem(){
-//TODO
-}
 
     /**
      * Get user input from editor and save inventory item into database.
