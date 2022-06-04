@@ -1,5 +1,6 @@
 package com.example.inventoryapp;
 
+import android.annotation.SuppressLint;
 import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -20,8 +21,6 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 /**
@@ -30,10 +29,14 @@ import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    /** Identifier for the inventory data loader */
+    /**
+     * Identifier for the inventory data loader
+     */
     private static final int INVENTORY_LOADER = 0;
 
-    /** Adapter for the ListView */
+    /**
+     * Adapter for the ListView
+     */
     InventoryCursorAdapter mCursorAdapter;
 
     @Override
@@ -42,39 +45,32 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
 
         // Setup FAB to open EditorActivity
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, InventoryEditorActivity.class);
-                startActivity(intent);
-            }
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, InventoryEditorActivity.class);
+            startActivity(intent);
         });
 
         // Find the ListView which will be populated with inventory list
-        ListView inventoryListView = (ListView) findViewById(R.id.list);
+        ListView inventoryListView = findViewById(R.id.list);
 
         //setup item view on click listener
-        inventoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        inventoryListView.setOnItemClickListener((adapterView, view, position, id) -> {
+            //create intent to go to editor activity
+            Intent intent = new Intent(MainActivity.this, InventoryEditorActivity.class);
 
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-//create intent to go to editor activity
-                Intent intent = new Intent(MainActivity.this, InventoryEditorActivity.class);
+            //form a content URI that represents the specific inventory item that was clicked on,
+            //by appending the "id" (passed as input to the method) onto the
+            //{@link InventoryEntry#CONTENT_URI}.
+            //for example, the URI would be "content://com.example.inventory/inventory/2"
+            //if the inventory item with id 2 was clicked on
+            Uri currentItemUri = ContentUris.withAppendedId(InventoryContract.InventoryEntry.CONTENT_URI, id);
 
-                //form a content URI that represents the specific inventory item that was clicked on,
-                //by appending the "id" (passed as input to the method) onto the
-                //{@link InventoryEntry#CONTENT_URI}.
-                //for example, the URI would be "content://com.example.inventoryapp/inventory/2"
-                //if the inventory item with id 2 was clicked on
-                Uri currentItemUri = ContentUris.withAppendedId(InventoryContract.InventoryEntry.CONTENT_URI, id);
+            //Set the URI on the data field of the intent
+            intent.setData(currentItemUri);
 
-                //Set the URI on the data field of the intent
-                intent.setData(currentItemUri);
-
-                //Launch the {@link InventoryEditorActivity} to display the data for the current inventory item
-                startActivity(intent);
-            }
+            //Launch the {@link InventoryEditorActivity} to display the data for the current inventory item
+            startActivity(intent);
         });
 
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
@@ -100,12 +96,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_NAME, "Computer");
         values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY, "6");
         values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE, "1999");
-
-        // Insert a new row for inventory item into the provider using the ContentResolver.
-        // Use the {@link InventoryEntry#CONTENT_URI} to indicate that we want to insert
-        // into the inventory database table.
-        // Receive the new content URI that will allow us to access inventory item data in the future.
-        Uri newUri = getContentResolver().insert(InventoryContract.InventoryEntry.CONTENT_URI, values);
     }
 
     /**
@@ -123,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // User clicked on a menu option in the app bar overflow menu
@@ -165,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-// Callback called when the data needs to be deleted
+        // Callback called when the data needs to be deleted
         mCursorAdapter.swapCursor(null);
     }
 }

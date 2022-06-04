@@ -1,15 +1,11 @@
 package com.example.inventoryapp;
 
-import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.inventoryapp.data.InventoryContract;
-import com.example.inventoryapp.data.InventoryProvider;
-
-import java.net.URI;
 
 /**
  * {@link InventoryCursorAdapter} is an adapter for a list or grid view
@@ -43,10 +36,10 @@ public class InventoryCursorAdapter extends CursorAdapter {
     /**
      * Makes a new blank list item view. No data is set (or bound) to the views yet.
      *
-     * @param context app context
-     * @param cursor  The cursor from which to get the data. The cursor is already
-     *                moved to the correct position.
-     * @param viewGroup  The parent to which the new view is attached to
+     * @param context   app context
+     * @param cursor    The cursor from which to get the data. The cursor is already
+     *                  moved to the correct position.
+     * @param viewGroup The parent to which the new view is attached to
      * @return the newly created list item view.
      */
 
@@ -70,9 +63,9 @@ public class InventoryCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         // Find individual views that we want to modify in the list item layout
-        TextView nameTextView = (TextView) view.findViewById(R.id.name);
-        TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
-        TextView priceTextView = (TextView) view.findViewById(R.id.price);
+        TextView nameTextView = view.findViewById(R.id.name);
+        TextView quantityTextView = view.findViewById(R.id.quantity);
+        TextView priceTextView = view.findViewById(R.id.price);
 
         // Find the columns of inventory item attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_ITEM_NAME);
@@ -80,7 +73,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
         int priceColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE);
         int idColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry._ID);
 
-final int rowId = cursor.getInt(idColumnIndex);
+        final int rowId = cursor.getInt(idColumnIndex);
 
         // Read the inventory item attributes from the Cursor for the current item
         String name = cursor.getString(nameColumnIndex);
@@ -89,72 +82,60 @@ final int rowId = cursor.getInt(idColumnIndex);
 
         // Update the TextViews with the attributes for the current item
         nameTextView.setText(name);
-        quantityTextView.setText("" + itemQuantity);
+        quantityTextView.setText(String.valueOf(itemQuantity));
         priceTextView.setText(price);
 
-            if (itemQuantity <= 1) {
-                quantityTextView.setText(itemQuantity + " " + context.getResources().getString(R.string.unit));
-            } else {
-                quantityTextView.setText(itemQuantity + " " + context.getResources().getString(R.string.units));
-            }
+        String quantityDisplay;
+
+        if (itemQuantity <= 1) {
+            quantityDisplay = itemQuantity + " " + context.getResources().getString(R.string.unit);
+        } else {
+            quantityDisplay = itemQuantity + " " + context.getResources().getString(R.string.units);
+        }
+
+        quantityTextView.setText(quantityDisplay);
 
         LinearLayout parentView = view.findViewById(R.id.parent);
-parentView.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        //Open editor activity
-        Intent intent = new Intent(context, InventoryEditorActivity.class);
-
-        //Form the content URI that represents click item.
-        Uri currentInventoryUri = ContentUris.withAppendedId(InventoryContract.InventoryEntry.CONTENT_URI, rowId);
-
-        //set the URI on the data field of the intent
-        intent.setData(currentInventoryUri);
-        context.startActivity(intent);
-    }
-});
-
-        ImageView saleButton = view.findViewById(R.id.sale_button);
-saleButton.setClickable(true);
-saleButton.setEnabled(true);
-saleButton.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        int idColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry._ID);
-        String id = cursor.getString(idColumnIndex);
-        String text = quantityTextView.getText().toString();
-        String[] splittedText = text.split(" ");
-        int quantity = Integer.parseInt(splittedText[0]);
-
-        if (quantity == 0) {
-            Toast.makeText(context, R.string.no_more_stock, Toast.LENGTH_SHORT).show();
-        } else if (quantity > 0) {
-quantity = quantity - 1;
-
-String quantityString = Integer.toString(quantity);
-ContentValues values = new ContentValues();
-values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY, quantityString);
+        parentView.setOnClickListener(view1 -> {
+            //Open editor activity
+            Intent intent = new Intent(context, InventoryEditorActivity.class);
 
             //Form the content URI that represents click item.
             Uri currentInventoryUri = ContentUris.withAppendedId(InventoryContract.InventoryEntry.CONTENT_URI, rowId);
 
+            //set the URI on the data field of the intent
+            intent.setData(currentInventoryUri);
+            context.startActivity(intent);
+        });
 
-int rowsAffected = context.getContentResolver().update(currentInventoryUri, values, null, null);
+        ImageView saleButton = view.findViewById(R.id.sale_button);
+        saleButton.setClickable(true);
+        saleButton.setEnabled(true);
+        saleButton.setOnClickListener(view12 -> {
+            String text = quantityTextView.getText().toString();
+            String[] splitText = text.split(" ");
+            int quantity = Integer.parseInt(splitText[0]);
 
-if(rowsAffected != 0) {
-    //update text view if database update is successful
-    if (itemQuantity <= 1) {
-        quantityTextView.setText(quantity + " " + context.getResources().getString(R.string.unit));
-    } else {
-        quantityTextView.setText(quantity + " " + context.getResources().getString(R.string.units));
+            if (quantity == 0) {
+                Toast.makeText(context, R.string.no_more_stock, Toast.LENGTH_SHORT).show();
+            } else if (quantity > 0) {
+                quantity = quantity - 1;
+                String quantityString = Integer.toString(quantity);
+                ContentValues values = new ContentValues();
+                values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY, quantityString);
+
+                //Form the content URI that represents click item.
+                Uri currentInventoryUri = ContentUris.withAppendedId(InventoryContract.InventoryEntry.CONTENT_URI, rowId);
+
+                int rowsAffected = context.getContentResolver().update(currentInventoryUri, values, null, null);
+
+                if (rowsAffected != 0) {
+                    //update text view if database update is successful
+                    quantityTextView.setText(quantityDisplay);
+                } else {
+                    Toast.makeText(context, "Failed to update", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
-}else{
-    Toast.makeText(context, "Failed to update", Toast.LENGTH_SHORT).show();
-}
-        }
-
-    }
-    });
-    }
-
 }

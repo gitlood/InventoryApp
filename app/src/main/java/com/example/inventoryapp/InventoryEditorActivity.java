@@ -1,13 +1,8 @@
 package com.example.inventoryapp;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
-
+import android.annotation.SuppressLint;
 import android.app.LoaderManager;
-import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,49 +13,60 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 
 import com.example.inventoryapp.data.InventoryContract;
 
 /**
  * Allows user to create a new inventory item or edit an existing one.
  */
-public class InventoryEditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class InventoryEditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    /** Identifier for the inventory data loader */
+    /**
+     * Identifier for the inventory data loader
+     */
     private static final int EXISTING_INVENTORY_LOADER = 0;
-
-    /** Content URI for the existing inventory item (null if it's a new inventory item) */
+    /**
+     * It stores the quantity of medicines
+     */
+    int quantityInt;
+    /**
+     * Content URI for the existing inventory item (null if it's a new inventory item)
+     */
     private Uri mCurrentInventoryItemUri;
-
-    /** EditText field to enter the inventory items name */
+    /**
+     * EditText field to enter the inventory items name
+     */
     private EditText mNameEditText;
-
-    /** EditText field to enter the inventory items quantity */
+    /**
+     * EditText field to enter the inventory items quantity
+     */
     private EditText mQuantityEditText;
-
-    /** EditText field to enter the inventory items price */
+    /**
+     * EditText field to enter the inventory items price
+     */
     private EditText mPriceEditText;
-
-    /** Boolean flag that keeps track of whether the inventory item has been edited (true) or not (false) */
+    /**
+     * Boolean flag that keeps track of whether the inventory item has been edited (true) or not (false)
+     */
     private boolean mInventoryItemHasChanged = false;
-
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
      * the view, and we change the mInventoryItemHasChanged boolean to true.
      */
-    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            mInventoryItemHasChanged = true;
-            return false;
-        }
+    @SuppressLint("ClickableViewAccessibility")
+    private final View.OnTouchListener mTouchListener = (view, motionEvent) -> {
+        mInventoryItemHasChanged = true;
+        return false;
     };
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,9 +96,9 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         }
 
         // Find all relevant views that we will need to read user input from
-        mNameEditText = (EditText) findViewById(R.id.edit_inventory_item_name);
-        mQuantityEditText = (EditText) findViewById(R.id.edit_inventory_item_quantity);
-        mPriceEditText = (EditText) findViewById(R.id.edit_inventory_item_price);
+        mNameEditText = findViewById(R.id.edit_inventory_item_name);
+        mQuantityEditText = findViewById(R.id.edit_inventory_item_quantity);
+        mPriceEditText = findViewById(R.id.edit_inventory_item_price);
 
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
         // has touched or modified them. This will let us know if there are unsaved changes
@@ -100,7 +106,6 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         mNameEditText.setOnTouchListener(mTouchListener);
         mQuantityEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
-
     }
 
     @Override
@@ -185,6 +190,7 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // User clicked on a menu option in the app bar overflow menu
@@ -214,12 +220,9 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
                 // Create a click listener to handle the user confirming that
                 // changes should be discarded.
                 DialogInterface.OnClickListener discardButtonClickListener =
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                // User clicked "Discard" button, navigate to parent activity.
-                                NavUtils.navigateUpFromSameTask(InventoryEditorActivity.this);
-                            }
+                        (dialogInterface, i) -> {
+                            // User clicked "Discard" button, navigate to parent activity.
+                            NavUtils.navigateUpFromSameTask(InventoryEditorActivity.this);
                         };
 
                 // Show a dialog that notifies the user they have unsaved changes
@@ -243,12 +246,9 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         // Otherwise if there are unsaved changes, setup a dialog to warn the user.
         // Create a click listener to handle the user confirming that changes should be discarded.
         DialogInterface.OnClickListener discardButtonClickListener =
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // User clicked "Discard" button, close the current activity.
-                        finish();
-                    }
+                (dialogInterface, i) -> {
+                    // User clicked "Discard" button, close the current activity.
+                    finish();
                 };
 
         // Show dialog that there are unsaved changes
@@ -299,8 +299,8 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
             mNameEditText.setText(name);
             mQuantityEditText.setText(quantity);
             mPriceEditText.setText(price);
-            }
         }
+    }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
@@ -324,13 +324,11 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.unsaved_changes_dialog_msg);
         builder.setPositiveButton(R.string.discard, discardButtonClickListener);
-        builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Keep editing" button, so dismiss the dialog
-                // and continue editing the inventory item.
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+        builder.setNegativeButton(R.string.keep_editing, (dialog, id) -> {
+            // User clicked the "Keep editing" button, so dismiss the dialog
+            // and continue editing the inventory item.
+            if (dialog != null) {
+                dialog.dismiss();
             }
         });
 
@@ -347,19 +345,15 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         // for the positive and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.delete_dialog_msg);
-        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Delete" button, so delete the inventory item.
-                deleteInventoryItem();
-            }
+        builder.setPositiveButton(R.string.delete, (dialog, id) -> {
+            // User clicked the "Delete" button, so delete the inventory item.
+            deleteInventoryItem();
         });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Cancel" button, so dismiss the dialog
-                // and continue editing the inventory item.
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+        builder.setNegativeButton(R.string.cancel, (dialog, id) -> {
+            // User clicked the "Cancel" button, so dismiss the dialog
+            // and continue editing the inventory item.
+            if (dialog != null) {
+                dialog.dismiss();
             }
         });
 
@@ -396,15 +390,10 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
     }
 
     /**
-     * It stores the quantity of medicines
-     */
-    int quantityInt;
-
-    /**
      * Decreases the quantity of medicines
      */
     public void decrement(View view) {
-        quantityInt = Integer.valueOf(mQuantityEditText.getText().toString());
+        quantityInt = Integer.parseInt(mQuantityEditText.getText().toString());
         if (quantityInt == 0) {
             // Show an error message as a toast
             Toast.makeText(this, "Negative values are not accepted", Toast.LENGTH_SHORT).show();
@@ -420,7 +409,7 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
      * Increases the quantity of medicines
      */
     public void increment(View view) {
-        quantityInt = Integer.valueOf(mQuantityEditText.getText().toString());
+        quantityInt = Integer.parseInt(mQuantityEditText.getText().toString());
         quantityInt = quantityInt + 1;
         mQuantityEditText.setText(String.valueOf(quantityInt));
     }

@@ -8,11 +8,6 @@ import android.provider.BaseColumns;
  * API Contract for the Inventory app.
  */
 public class InventoryContract {
-    // To prevent someone from accidentally instantiating the contract class,
-    // give it an empty constructor.
-    private InventoryContract() {
-    }
-
     /**
      * The "Content authority" is a name for the entire content provider, similar to the
      * relationship between a domain name and its website.  A convenient string to use for the
@@ -20,13 +15,11 @@ public class InventoryContract {
      * device.
      */
     public static final String CONTENT_AUTHORITY = "com.example.inventoryapp";
-
     /**
      * Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
      * the content provider.
      */
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
-
     /**
      * Possible path (appended to base content URI for possible URI's)
      * For instance, content://com.example.inventoryapp/inventory/ is a valid path for
@@ -34,6 +27,11 @@ public class InventoryContract {
      * as the ContentProvider hasn't been given any information on what to do with "staff".
      */
     public static final String PATH_INVENTORY = "inventory";
+
+    // To prevent someone from accidentally instantiating the contract class,
+    // give it an empty constructor.
+    private InventoryContract() {
+    }
 
     /**
      * Inner class that defines constant values for the pets database table.
