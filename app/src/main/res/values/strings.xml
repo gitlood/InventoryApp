@@ -79,5 +79,9 @@
     <string name="unit"> unit</string>
     <string name="units"> units</string>
     <string name="no_more_stock">No more stock</string>
+    <string name="one">1</string>
+    <string name="minus">-</string>
+    <string name="plus">+</string>
+    <string name="quantity">Quantity</string>
 
 </resources>

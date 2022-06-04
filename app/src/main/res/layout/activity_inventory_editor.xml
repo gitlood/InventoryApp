@@ -8,21 +8,11 @@
     android:padding="16dp"
     tools:context="com.example.inventoryapp.InventoryEditorActivity">
 
-    <!-- Overview category -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <!-- Label -->
-        <TextView
-            android:text="@string/category_overview"
-            style="@style/CategoryStyle" />
 
         <!-- Input fields -->
         <LinearLayout
             android:layout_height="wrap_content"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_weight="2"
             android:paddingLeft="4dp"
             android:orientation="vertical">
@@ -34,13 +24,45 @@
                 android:inputType="textCapWords"
                 style="@style/EditorFieldStyle" />
 
-            <!-- Quantity field -->
-            <EditText
-                android:id="@+id/edit_inventory_item_quantity"
-                android:hint="@string/hint_inventory_item_quantity"
-                android:inputType="textCapWords"
-                style="@style/EditorFieldStyle" />
+            <!-- Quantity category -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
+                <!-- Label -->
+                <TextView
+                    style="@style/EditorFieldStyle"
+                    android:layout_width="wrap_content"
+                    android:text="@string/quantity" />
+
+                <Button
+                    android:id="@+id/decreaseButton"
+                    android:layout_width="@dimen/button"
+                    android:layout_height="@dimen/button"
+                    android:layout_marginLeft="@dimen/marginLeft"
+                    android:onClick="decrement"
+                    android:text="@string/minus"
+                    android:textSize="@dimen/textSize" />
+
+                <!-- Quantity field -->
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:id="@+id/edit_inventory_item_quantity"
+                    android:hint="@string/hint_inventory_item_quantity"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:text="@string/one"
+                    style="@style/EditorFieldStyle" />
+
+                <Button
+                    android:id="@+id/increaseButton"
+                    android:layout_width="@dimen/button"
+                    android:layout_height="@dimen/button"
+                    android:onClick="increment"
+                    android:text="@string/plus"
+                    android:textSize="@dimen/textSize" />
+            </LinearLayout>
             <!-- Price field -->
             <EditText
                 android:id="@+id/edit_inventory_item_price"
@@ -49,5 +71,3 @@
                 style="@style/EditorFieldStyle" />
         </LinearLayout>
     </LinearLayout>
-
-     </LinearLayout>

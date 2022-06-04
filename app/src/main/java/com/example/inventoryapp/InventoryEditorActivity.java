@@ -395,4 +395,34 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         finish();
     }
 
+    /**
+     * It stores the quantity of medicines
+     */
+    int quantityInt;
+
+    /**
+     * Decreases the quantity of medicines
+     */
+    public void decrement(View view) {
+        quantityInt = Integer.valueOf(mQuantityEditText.getText().toString());
+        if (quantityInt == 0) {
+            // Show an error message as a toast
+            Toast.makeText(this, "Negative values are not accepted", Toast.LENGTH_SHORT).show();
+            // Exit this method early because there's nothing left to do
+            return;
+        }
+        quantityInt = quantityInt - 1;
+        mQuantityEditText.setText(String.valueOf(quantityInt));
+
+    }
+
+    /**
+     * Increases the quantity of medicines
+     */
+    public void increment(View view) {
+        quantityInt = Integer.valueOf(mQuantityEditText.getText().toString());
+        quantityInt = quantityInt + 1;
+        mQuantityEditText.setText(String.valueOf(quantityInt));
+    }
+
 }

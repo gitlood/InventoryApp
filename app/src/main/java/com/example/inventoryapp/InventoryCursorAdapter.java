@@ -92,12 +92,11 @@ final int rowId = cursor.getInt(idColumnIndex);
         quantityTextView.setText("" + itemQuantity);
         priceTextView.setText(price);
 
-        if(itemQuantity <= 1){
             if (itemQuantity <= 1) {
                 quantityTextView.setText(itemQuantity + " " + context.getResources().getString(R.string.unit));
             } else {
                 quantityTextView.setText(itemQuantity + " " + context.getResources().getString(R.string.units));
-            }        }
+            }
 
         LinearLayout parentView = view.findViewById(R.id.parent);
 parentView.setOnClickListener(new View.OnClickListener() {
