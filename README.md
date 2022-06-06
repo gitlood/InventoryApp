@@ -14,11 +14,11 @@ By practicing these skills and building this app, you will have the foundation t
 ## What will I learn?
 This project is about combining various ideas and skills we’ve been practicing throughout the course. They include:
 
-Storing information in a SQLite database
-Integrating Android’s file storage systems into that database
-Presenting information from files and SQLite databases to users
-Updating information based on user input.
-Creating intents to other apps using stored information.
+* Storing information in a SQLite database
+* Integrating Android’s file storage systems into that database
+* Presenting information from files and SQLite databases to users
+* Updating information based on user input.
+* Creating intents to other apps using stored information.
 
 <table border="0">
 <tr>
