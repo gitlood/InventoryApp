@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -110,6 +111,10 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         mSupplierEditText = findViewById(R.id.edit_Supplier);
         mPhoneEditText = findViewById(R.id.edit_Phone);
 
+        //setup buttons for order volume
+        Button increment = findViewById(R.id.increaseButton);
+        Button decrement = findViewById(R.id.decreaseButton);
+
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
         // has touched or modified them. This will let us know if there are unsaved changes
         // or not, if the user tries to leave the editor without saving.
@@ -118,6 +123,9 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         mPriceEditText.setOnTouchListener(mTouchListener);
         mSupplierEditText.setOnTouchListener(mTouchListener);
         mPhoneEditText.setOnTouchListener(mTouchListener);
+
+        increment.setOnClickListener(view -> increment());
+        decrement.setOnClickListener(view -> decrement());
     }
 
     @Override
@@ -418,7 +426,7 @@ String phone = cursor.getString(phoneColumnIndex);
     /**
      * Decreases the quantity of medicines
      */
-    public void decrement(View view) {
+    public void decrement() {
         quantityInt = Integer.parseInt(mQuantityEditText.getText().toString());
         if (quantityInt == 0) {
             // Show an error message as a toast
@@ -434,7 +442,7 @@ String phone = cursor.getString(phoneColumnIndex);
     /**
      * Increases the quantity of medicines
      */
-    public void increment(View view) {
+    public void increment() {
         quantityInt = Integer.parseInt(mQuantityEditText.getText().toString());
         quantityInt = quantityInt + 1;
         mQuantityEditText.setText(String.valueOf(quantityInt));
