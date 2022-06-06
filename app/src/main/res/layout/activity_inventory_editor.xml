@@ -26,7 +26,8 @@
             android:id="@+id/edit_name"
             style="@style/EditorFieldStyle"
             android:hint="@string/name"
-            android:inputType="textCapWords" />
+            android:inputType="textCapWords"
+            android:autofillHints="@string/name" />
 
     </LinearLayout>
             <!-- Quantity category -->
@@ -46,7 +47,7 @@
             android:id="@+id/decreaseButton"
             android:layout_width="@dimen/button"
             android:layout_height="@dimen/button"
-            android:layout_marginLeft="@dimen/marginLeft"
+            android:layout_marginStart="@dimen/marginLeft"
             android:onClick="decrement"
             android:text="@string/minus"
             android:textSize="@dimen/textSize" />
@@ -58,7 +59,8 @@
             android:gravity="center"
             android:inputType="number"
             android:text="@string/one"
-            android:textSize="@dimen/textSize" />
+            android:textSize="@dimen/textSize"
+            android:autofillHints="@string/one" />
 
         <Button
             android:id="@+id/increaseButton"
@@ -84,7 +86,8 @@
         <EditText
             android:id="@+id/edit_price"
             style="@style/EditorFieldStyle"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:autofillHints="@string/price" />
     </LinearLayout>
 
     <!-- Supplier category -->
@@ -103,7 +106,8 @@
         <EditText
             android:id="@+id/edit_Supplier"
             style="@style/EditorFieldStyle"
-            android:inputType="text" />
+            android:inputType="text"
+            android:autofillHints="@string/supplier" />
     </LinearLayout>
 
     <!-- Phone category -->
@@ -122,6 +126,7 @@
         <EditText
             android:id="@+id/edit_Phone"
             style="@style/EditorFieldStyle"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:autofillHints="@string/phone" />
     </LinearLayout>
     </LinearLayout>

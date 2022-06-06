@@ -1,4 +1,4 @@
-# TourProjectApp
+# Inventory App
 Android Basics: Data Storage(ud845) - Project
 
 ## Project Overview
@@ -20,7 +20,7 @@ This project is about combining various ideas and skills we’ve been practicing
 * Updating information based on user input.
 * Creating intents to other apps using stored information.
 
-<table border="0">
+<table>
 <tr>
 <td>
 Main Screen<br>
