@@ -55,6 +55,14 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
     /**
      * Boolean flag that keeps track of whether the inventory item has been edited (true) or not (false)
      */
+    private EditText mSupplierEditText;
+    /**
+     * Boolean flag that keeps track of whether the inventory item has been edited (true) or not (false)
+     */
+    private EditText mPhoneEditText;
+    /**
+     * Boolean flag that keeps track of whether the inventory item has been edited (true) or not (false)
+     */
     private boolean mInventoryItemHasChanged = false;
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
@@ -96,9 +104,11 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         }
 
         // Find all relevant views that we will need to read user input from
-        mNameEditText = findViewById(R.id.edit_inventory_item_name);
-        mQuantityEditText = findViewById(R.id.edit_inventory_item_quantity);
-        mPriceEditText = findViewById(R.id.edit_inventory_item_price);
+        mNameEditText = findViewById(R.id.edit_name);
+        mQuantityEditText = findViewById(R.id.edit_quantity);
+        mPriceEditText = findViewById(R.id.edit_price);
+        mSupplierEditText = findViewById(R.id.edit_Supplier);
+        mPhoneEditText = findViewById(R.id.edit_Phone);
 
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
         // has touched or modified them. This will let us know if there are unsaved changes
@@ -106,6 +116,8 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         mNameEditText.setOnTouchListener(mTouchListener);
         mQuantityEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
+        mSupplierEditText.setOnTouchListener(mTouchListener);
+        mPhoneEditText.setOnTouchListener(mTouchListener);
     }
 
     @Override
@@ -128,6 +140,8 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         String nameString = mNameEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
+        String supplierString = mSupplierEditText.getText().toString().trim();
+        String phoneString = mPhoneEditText.getText().toString().trim();
 
         // Check if this is supposed to be a new inventory item
         // and check if all the fields in the editor are blank
@@ -145,6 +159,8 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_NAME, nameString);
         values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY, quantityString);
         values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE, priceString);
+        values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_SUPPLIER, supplierString);
+        values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_PHONE, phoneString);
 
         // Determine if this is a new or existing inventory item by checking if mCurrentInventoryUri is null or not
         if (mCurrentInventoryItemUri == null) {
@@ -263,7 +279,9 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
                 InventoryContract.InventoryEntry._ID,
                 InventoryContract.InventoryEntry.COLUMN_ITEM_NAME,
                 InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY,
-                InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE
+                InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE,
+                InventoryContract.InventoryEntry.COLUMN_ITEM_SUPPLIER,
+                InventoryContract.InventoryEntry.COLUMN_ITEM_PHONE
         };
 
         // This loader will execute the ContentProvider's query method on a background thread
@@ -289,16 +307,22 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
             int nameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_ITEM_NAME);
             int quantityColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY);
             int priceColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE);
+            int supplierColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_ITEM_SUPPLIER);
+            int phoneColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_ITEM_PHONE);
 
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
             String quantity = cursor.getString(quantityColumnIndex);
             String price = cursor.getString(priceColumnIndex);
+String supplier = cursor.getString(supplierColumnIndex);
+String phone = cursor.getString(phoneColumnIndex);
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
             mQuantityEditText.setText(quantity);
             mPriceEditText.setText(price);
+            mSupplierEditText.setText(supplier);
+            mPhoneEditText.setText(phone);
         }
     }
 
@@ -308,6 +332,8 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         mNameEditText.setText("");
         mQuantityEditText.setText("");
         mPriceEditText.setText("");
+        mSupplierEditText.setText("");
+        mPhoneEditText.setText("");
     }
 
     /**

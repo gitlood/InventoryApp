@@ -89,5 +89,19 @@ public class InventoryContract {
          */
         public final static String COLUMN_ITEM_PRICE = "price";
 
+        /**
+         * Supplier of the inventory item.
+         * <p>
+         * Type: STRING
+         */
+        public final static String COLUMN_ITEM_SUPPLIER = "supplier";
+
+        /**
+         * Phone of the inventory item.
+         * <p>
+         * Type: STRING
+         */
+        public final static String COLUMN_ITEM_PHONE = "phone";
+
     }
 }
