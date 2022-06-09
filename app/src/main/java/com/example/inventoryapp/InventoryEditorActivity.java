@@ -225,11 +225,12 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
             return;
         }
 
+        // Default Image if the user has no image for the medicine.
+        byte[] defaultImage = DbBitmapUtility.getImage(this, R.drawable.dragon);
+
         // Create a ContentValues object where column names are the keys,
         // and inventory item attributes from the editor are the values.
         ContentValues values = new ContentValues();
-        // Default Image if the user has no image for the medicine.
-        byte[] defaultImage = DbBitmapUtility.getImage(this, R.drawable.dragon);
 
         if (imageByteArray == null) {
             values.put(InventoryContract.InventoryEntry.COLUMN_IMAGE, defaultImage);
@@ -360,6 +361,7 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
                 InventoryContract.InventoryEntry.COLUMN_ITEM_NAME,
                 InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY,
                 InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE,
+                InventoryContract.InventoryEntry.COLUMN_IMAGE,
                 InventoryContract.InventoryEntry.COLUMN_ITEM_SUPPLIER,
                 InventoryContract.InventoryEntry.COLUMN_ITEM_PHONE
         };
@@ -387,6 +389,7 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
             int nameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_ITEM_NAME);
             int quantityColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY);
             int priceColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE);
+            int imageColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_IMAGE);
             int supplierColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_ITEM_SUPPLIER);
             int phoneColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_ITEM_PHONE);
 
@@ -394,6 +397,8 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
             String name = cursor.getString(nameColumnIndex);
             String quantity = cursor.getString(quantityColumnIndex);
             String price = cursor.getString(priceColumnIndex);
+            imageByteArray = cursor.getBlob(imageColumnIndex);
+            Bitmap image = DbBitmapUtility.getImage(imageByteArray);
             String supplier = cursor.getString(supplierColumnIndex);
             String phone = cursor.getString(phoneColumnIndex);
 
@@ -401,6 +406,7 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
             mNameEditText.setText(name);
             mQuantityEditText.setText(quantity);
             mPriceEditText.setText(price);
+            imageView.setImageBitmap(image);
             mSupplierEditText.setText(supplier);
             mPhoneEditText.setText(phone);
         }
@@ -412,6 +418,7 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         mNameEditText.setText("");
         mQuantityEditText.setText("");
         mPriceEditText.setText("");
+        imageView.setImageResource(0);
         mSupplierEditText.setText("");
         mPhoneEditText.setText("");
     }
