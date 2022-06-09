@@ -90,6 +90,12 @@ public class InventoryContract {
         public final static String COLUMN_ITEM_PRICE = "price";
 
         /**
+         * Image of the item.
+         * Type: INTEGER
+         */
+        public static final String COLUMN_IMAGE = "image";
+
+        /**
          * Supplier of the inventory item.
          * <p>
          * Type: STRING

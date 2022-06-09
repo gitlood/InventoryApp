@@ -1,5 +1,6 @@
 package com.example.inventoryapp;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.LoaderManager;
 import android.content.ContentValues;
@@ -7,15 +8,21 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -23,6 +30,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 
 import com.example.inventoryapp.data.InventoryContract;
+
+import java.io.IOException;
 
 /**
  * Allows user to create a new inventory item or edit an existing one.
@@ -66,6 +75,17 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
      */
     private boolean mInventoryItemHasChanged = false;
     /**
+     * Button to get the medicine's image
+     */
+    private Button imageButton;
+    /**
+     * ImageView to show the medicine's image
+     */
+    private ImageView imageView;
+    byte[] imageByteArray;
+    Bitmap bitmap;
+
+    /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
      * the view, and we change the mInventoryItemHasChanged boolean to true.
      */
@@ -74,6 +94,24 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         mInventoryItemHasChanged = true;
         return false;
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+
+            Uri selectedImage = data.getData();
+            imageView.setImageURI(selectedImage);
+
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                imageByteArray = DbBitmapUtility.getBytes(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -110,6 +148,8 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         mPriceEditText = findViewById(R.id.edit_price);
         mSupplierEditText = findViewById(R.id.edit_Supplier);
         mPhoneEditText = findViewById(R.id.edit_Phone);
+        imageButton = findViewById(R.id.buttonForImage);
+        imageView = findViewById(R.id.imageView);
 
         //setup buttons for order volume
         Button increment = findViewById(R.id.increaseButton);
@@ -123,9 +163,12 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         mPriceEditText.setOnTouchListener(mTouchListener);
         mSupplierEditText.setOnTouchListener(mTouchListener);
         mPhoneEditText.setOnTouchListener(mTouchListener);
+        imageButton.setOnTouchListener(mTouchListener);
 
         increment.setOnClickListener(view -> increment());
         decrement.setOnClickListener(view -> decrement());
+
+        imageButton.setOnClickListener(v -> getImageFromGallery());
     }
 
     @Override
@@ -137,6 +180,27 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
             menuItem.setVisible(false);
         }
         return true;
+    }
+
+    // Get Image from Gallery
+    private void getImageFromGallery() {
+        int READ_EXTERNAL_STORAGE = 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (InventoryEditorActivity.this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                InventoryEditorActivity.this.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE);
+                return;
+            }
+        }
+
+        try {
+            Intent intent = new Intent(Intent.ACTION_PICK,
+                    MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+            intent.setType("image/*");
+            startActivityForResult(intent, 100);
+        } catch (Exception exp) {
+            Log.i("Error", exp.toString());
+        }
+
     }
 
     /**
@@ -164,6 +228,14 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
         // Create a ContentValues object where column names are the keys,
         // and inventory item attributes from the editor are the values.
         ContentValues values = new ContentValues();
+        // Default Image if the user has no image for the medicine.
+        byte[] defaultImage = DbBitmapUtility.getImage(this, R.drawable.dragon);
+
+        if (imageByteArray == null) {
+            values.put(InventoryContract.InventoryEntry.COLUMN_IMAGE, defaultImage);
+        } else {
+            values.put(InventoryContract.InventoryEntry.COLUMN_IMAGE, imageByteArray);
+        }
         values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_NAME, nameString);
         values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY, quantityString);
         values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE, priceString);
@@ -322,8 +394,8 @@ public class InventoryEditorActivity extends AppCompatActivity implements Loader
             String name = cursor.getString(nameColumnIndex);
             String quantity = cursor.getString(quantityColumnIndex);
             String price = cursor.getString(priceColumnIndex);
-String supplier = cursor.getString(supplierColumnIndex);
-String phone = cursor.getString(phoneColumnIndex);
+            String supplier = cursor.getString(supplierColumnIndex);
+            String phone = cursor.getString(phoneColumnIndex);
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);

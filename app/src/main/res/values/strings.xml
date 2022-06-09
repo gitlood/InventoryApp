@@ -89,6 +89,9 @@
     <string name="supplier">Supplier</string>
     <string name="phone">Phone</string>
     <string name="order">Order</string>
+    <string name="picture_of_the_item">Picture of the inventory item</string>
+    <string name="add_photo">Add Photo</string>
+
 
 
 </resources>

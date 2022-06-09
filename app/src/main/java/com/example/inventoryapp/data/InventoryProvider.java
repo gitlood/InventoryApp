@@ -143,6 +143,12 @@ public class InventoryProvider extends ContentProvider {
             throw new IllegalArgumentException("Inventory item requires valid price");
         }
 
+        // Check that the image is not null
+        byte[] image = values.getAsByteArray(InventoryContract.InventoryEntry.COLUMN_IMAGE);
+        if (image == null) {
+            throw new IllegalArgumentException("Item requires an image");
+        }
+
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
@@ -212,6 +218,15 @@ public class InventoryProvider extends ContentProvider {
             Integer price = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE);
             if (price != null && price < 0) {
                 throw new IllegalArgumentException("Inventory item requires valid price");
+            }
+        }
+
+        // If the {@link InventoryEntry#COLUMN_IMAGE} key is present,
+        // check that the image value is not null.
+        if (values.containsKey(InventoryContract.InventoryEntry.COLUMN_IMAGE)) {
+            byte[] image = values.getAsByteArray(InventoryContract.InventoryEntry.COLUMN_IMAGE);
+            if (image == null) {
+                throw new IllegalArgumentException("Inventory requires an image");
             }
         }
 

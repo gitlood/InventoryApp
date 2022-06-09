@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_NAME, "Computer");
         values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY, "6");
         values.put(InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE, "1999");
+        values.put(InventoryContract.InventoryEntry.COLUMN_IMAGE, R.drawable.dragon);
     }
 
     /**
@@ -137,7 +138,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 InventoryContract.InventoryEntry._ID,
                 InventoryContract.InventoryEntry.COLUMN_ITEM_NAME,
                 InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY,
-                InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE};
+                InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE,
+                InventoryContract.InventoryEntry.COLUMN_IMAGE
+        };
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context

@@ -1,10 +1,12 @@
 package com.example.inventoryapp;
 
+import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,18 +62,22 @@ public class InventoryCursorAdapter extends CursorAdapter {
      *                correct row.
      */
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = view.findViewById(R.id.name);
         TextView quantityTextView = view.findViewById(R.id.quantity);
         TextView priceTextView = view.findViewById(R.id.price);
+        ImageView image = view.findViewById(R.id.image);
 
         // Find the columns of inventory item attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_ITEM_NAME);
         int quantityColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_ITEM_QUANTITY);
         int priceColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_ITEM_PRICE);
         int idColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry._ID);
+        int imageColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_IMAGE);
+
 
         final int rowId = cursor.getInt(idColumnIndex);
 
@@ -80,10 +86,15 @@ public class InventoryCursorAdapter extends CursorAdapter {
         final int itemQuantity = cursor.getInt(quantityColumnIndex);
         String price = cursor.getString(priceColumnIndex);
 
+        byte[] arrayImage = cursor.getBlob(imageColumnIndex);
+        Bitmap inventoryImage = DbBitmapUtility.getImage(arrayImage);
+
         // Update the TextViews with the attributes for the current item
         nameTextView.setText(name);
         quantityTextView.setText(String.valueOf(itemQuantity));
-        priceTextView.setText(price);
+        priceTextView.setText("$" + price);
+
+        image.setImageBitmap(inventoryImage);
 
         String quantityDisplay;
 
